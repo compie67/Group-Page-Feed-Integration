@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns="http://www.opensource-socialnetwork.org/v/3.0">
+    <name>Group &amp; Page Feed</name>
+    <id>GroupPageFeed</id>
+    <author>Eric Redegeld / JustBSocial</author>
+    <author_url>https://justbsocial.eu/</author_url>
+    <description>Toont groeps- en businesspage-berichten op de homefeed zonder core-wijzigingen.</description>
+    <license>GPLv3</license>
+    <license_url>https://www.gnu.org/licenses/mit.html</license_url>
+    <version>1.0.1</version>
+    <requires>
+        <type>ossn_version</type>
+        <version>8.1</version>
+    </requires>
+</component>
