@@ -1,5 +1,7 @@
 🇬🇧 GroupPageFeed for OSSN (v1.0.1 Final – JustBSocial Edition)
 
+test site https://nlsociaal.nl/test/wallposts
+
 Description:
 The GroupPageFeed component extends the Open Source Social Network (OSSN) home feed to include posts from both Groups and Business Pages — all without any core modifications.
 It also adds a secure privacy layer that automatically hides posts from private or closed groups for non-members, keeping user content visible only where it should be.
