@@ -55,11 +55,11 @@ if ($posts) {
             }
         }
 
-        // ✅ Visible posts only below this line
+        //  Visible posts only below this line
         $item  = ossn_wallpost_to_item($post);
         $label = '';
 
-        // 🏷️ Group label
+        //  Group label
         if ($post->type === 'group') {
             $group = ossn_get_group_by_guid($post->owner_guid);
             if ($group) {
@@ -71,7 +71,7 @@ if ($posts) {
             }
         }
 
-        // 📄 Business page label
+        //  Business page label
         if ($post->type === 'businesspage') {
             if (class_exists('\Ossn\Component\BusinessPage\Page')) {
                 $page_obj = new \Ossn\Component\BusinessPage\Page();
