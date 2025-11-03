@@ -1,112 +1,54 @@
-Any insight on my problem!
+🇬🇧 GroupPageFeed for OSSN (v1.0.1 Final – JustBSocial Edition)
 
-https://nlsociaal.nl/test/
-shadow site
+Description:
+The GroupPageFeed component extends the Open Source Social Network (OSSN) home feed to include posts from both Groups and Business Pages — all without any core modifications.
+It also adds a secure privacy layer that automatically hides posts from private or closed groups for non-members, keeping user content visible only where it should be.
 
-Summary: Group & Page Feed Privacy Filtering Issue (OSSN 8.9)
-Context
+Key features:
 
-We developed a component called GroupPageFeed for OSSN v8.9, designed to extend the home feed with:
+🧩 Displays posts from users, groups, and business pages on the main feed
 
-Posts from groups (OssnGroups)
+🔒 Hides posts from private groups for users who aren’t members
 
-Posts from business pages (BusinessPage component)
+👑 Owners, members, and admins still see their content
 
-Full privacy filtering — only show posts a user is allowed to see
+⚙️ Fully core-safe — uses hooks and view overrides only
 
-The component uses ossn_add_hook('wall', 'load:post', ...) to filter posts after retrieval, without changing the core.
+🧘 Clean log output, single initialization
 
-What Works
+🌍 Multilingual ready
 
-✅ Public group posts appear correctly on the homefeed
-✅ Business page posts appear with a page label
-✅ No errors, no infinite loops after v7.8 (fixed component init logic)
-✅ Works across PHP 7.4 / 8.1 and OSSN 8.1 → 8.9
+Compatibility: OSSN 8.1 – 8.9
+License: GPLv3 (free to use and modify with attribution)
+Author: Eric Redegeld / JustBSocial.eu
 
-The Core Problem
+🚀 Roadmap
+Version	Planned Feature	Description
+1.1	Improved AJAX feed integration	Optimize hook for infinite scroll and live updates
+1.2	“Group context badge”	Small visual label showing group name + icon per post
+1.3	Admin dashboard filter	Allow site admins to toggle group/page visibility rules
+1.4	Multilingual feed filters	Match with user’s active locale (LanguageFilter module integration)
+1.5	Caching optimization	Reduce repeated group lookups for large communities
+2.0	Extended privacy matrix	Allow per-group overrides (public, members-only, federated)
+🇳🇱 Beschrijving (Nederlands)
 
-Private group posts are still visible on the home feed to users who are not members of those groups.
+GroupPageFeed breidt de startpagina van OSSN uit met berichten uit groepen en pagina’s — zonder aanpassingen aan de kerncode.
+Privé-groepen blijven automatisch afgeschermd: alleen leden, beheerders of de eigenaar zien hun berichten terug op de tijdlijn.
 
-Even though the filter logic checks:
+Belangrijkste functies:
 
-if (in_array($privacy, ['private', 'closed', OSSN_PRIVATE])) {
-    if (!ossn_is_group_member($group->guid, $user->guid)) continue;
-}
+Toont alle gebruikers-, groeps- en paginaberichten op de tijdlijn
 
+Verbergt privé-groepsberichten voor niet-leden
 
-…the $group->data->membership and $group->privacy values are inconsistent or missing.
-This causes the core OssnWall::GetPosts() to return all group posts, regardless of privacy.
+Eigenaren en beheerders behouden altijd toegang
 
-As a result:
+Geen core-aanpassingen — werkt via hooks
 
-Users outside the group see private posts (including text and images).
+Veilige logica en foutvrije initialisatie
 
-Clicking the post still shows the “Join group” screen — so the privacy UI works, but the post data is already exposed on the homefeed.
+Klaar voor meertalige integratie
 
-Filtering these posts via hook works only partially, since not all group objects expose a reliable privacy field.
-
-Likely Root Causes
-
-Inconsistent privacy fields
-
-$group->data->membership → sometimes “public” or “closed”
-
-$group->membership → sometimes “public” or “private”
-
-$group->privacy → sometimes missing or legacy value
-
-In some older installations, only an entity exists with key "membership" or "privacy".
-
-No native privacy check in OssnWall::GetPosts()
-The wall query returns all posts of type “group” without verifying the current user’s membership.
-
-Late execution of wall:load:post hooks
-Hooks execute after data retrieval — so the component can only hide items after fetching, not prevent them from loading in the first place.
-
-GroupPinPost / BusinessPage conflicts
-Some modules call group methods on plain OssnObject instances (isModerator()), which breaks if the post is rendered from outside the group page context.
-
-Recommended Fixes (Core-Level)
-
-Add a standard privacy field to groups, e.g. $group->access = public|private, guaranteed to be populated.
-
-Extend OssnWall::GetPosts() to:
-
-Skip posts from private groups for non-members
-
-Or trigger a filter hook before executing the SQL query.
-
-Optionally, provide a helper like ossn_group_is_visible($group_guid, $user_guid) to centralize visibility logic.
-
-Ensure consistent class naming in the BusinessPage module (OssnBusinessPage vs \Ossn\Component\BusinessPage\Page).
-
-Example Scenario
-
-Group “Danswijk residents” (private/closed)
-
-User A (not a member) logs in
-
-User A’s homefeed shows:
-
-📌 Post from group: Danswijk residents
-"Meeting at 20:00 tonight"
-
-
-→ Clicking the group shows the private page (locked),
-but the content is already exposed on the main feed.
-
-Expected Behavior
-
-Private group posts should never appear on the home feed to non-members.
-They should only be visible to:
-
-Logged-in members of the group
-
-Site admins or moderators
-
-Conclusion
-
-The GroupPageFeed component now integrates cleanly and efficiently with OSSN’s wall system,
-but highlights a core-level limitation:
-OssnWall::GetPosts() does not honor group privacy.
-A core hook or SQL-level access filter would fix this permanently and remove the need for complex post-fetch filtering.
+Compatibel met: OSSN 8.1 t/m 8.9
+Licentie: GPLv3 – vrij te gebruiken en aan te passen, mits met bronvermelding
+Auteur: Eric Redegeld / JustBSocial.eu
