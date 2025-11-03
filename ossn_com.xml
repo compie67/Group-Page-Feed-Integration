@@ -4,9 +4,12 @@
     <id>GroupPageFeed</id>
     <author>Eric Redegeld / JustBSocial</author>
     <author_url>https://justbsocial.eu/</author_url>
-    <description>Toont groeps- en businesspage-berichten op de homefeed zonder core-wijzigingen.</description>
+    <description>
+        Toont groeps- en businesspage-berichten op de homefeed zonder core-wijzigingen.
+        Vrij te gebruiken en aan te passen, mits met bronvermelding.
+    </description>
     <license>GPLv3</license>
-    <license_url>https://www.gnu.org/licenses/mit.html</license_url>
+    <license_url>https://www.gnu.org/licenses/gpl-3.0.html</license_url>
     <version>1.0.1</version>
     <requires>
         <type>ossn_version</type>
