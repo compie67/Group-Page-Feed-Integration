@@ -1,27 +1,27 @@
 <?php
 /**
- * GroupPageFeed Component (OSSN 8.9 Final NL tuned v8)
- * ---------------------------------------------------
- * ✅ Toont groeps- en pagina-posts in de homefeed
- * ✅ Verbergt privé-groepen voor niet-leden
- * ✅ Laat eigenaren, leden en admins hun groepen wel zien
- * ✅ Geen core-wijzigingen
+ * GroupPageFeed Component (OSSN 8.9 Final - English Clean Version)
+ * ---------------------------------------------------------------
+ * Displays group and business page posts in the main home feed.
+ * Hides posts from private/closed groups for non-members.
+ * Group owners, members, and site admins can still view them.
+ * No core modifications required.
  */
 
 define('GROUPPAGEFEED', ossn_route()->com . 'GroupPageFeed/');
 
 function grouppagefeed_init() {
-    error_log('[GROUPPAGEFEED] 🚀 Init gestart');
+    error_log('[GROUPPAGEFEED] Init started');
 
-    // Hook: filter groepsposts vóór weergave
+    // Hook: filter group posts before rendering
     ossn_add_hook('wall', 'load:post', 'grouppagefeed_filter_private_groups');
 
-    error_log('[GROUPPAGEFEED] ✅ Hooks geregistreerd');
+    error_log('[GROUPPAGEFEED] Hooks registered');
 }
 ossn_register_callback('ossn', 'init', 'grouppagefeed_init');
 
 /**
- * 🧠 Filter: verberg privé-groepsposts voor niet-leden
+ * Filter: hide private group posts for non-members
  */
 function grouppagefeed_filter_private_groups($hook, $type, $return, $params) {
     if (empty($return) || !is_array($return)) {
@@ -40,7 +40,7 @@ function grouppagefeed_filter_private_groups($hook, $type, $return, $params) {
                     continue;
                 }
 
-                // 🔍 Haal privacy/membership op
+                // Retrieve membership/privacy setting
                 $membership = '';
                 if (isset($group->membership)) {
                     $membership = strtolower($group->membership);
@@ -48,14 +48,15 @@ function grouppagefeed_filter_private_groups($hook, $type, $return, $params) {
                     $membership = strtolower($group->data->membership);
                 }
 
-                // 🔒 Controleer alleen als groep echt private/closed is
+                // Check only if the group is private or closed
                 if (in_array($membership, ['private', 'closed'])) {
                     $is_owner  = ($user && $group->owner_guid == $user->guid);
                     $is_member = ($user && function_exists('ossn_is_group_member') && ossn_is_group_member($group->guid, $user->guid));
                     $is_admin  = ($user && method_exists($user, 'canModerate') && $user->canModerate());
 
+                    // Hide post for users who are not owner, member, or admin
                     if (!$is_owner && !$is_member && !$is_admin) {
-                        error_log('[GROUPPAGEFEED] 🚫 Verborgen privébericht uit groep: ' . $group->title);
+                        error_log('[GROUPPAGEFEED] Hidden post from private group: ' . $group->title);
                         continue;
                     }
                 }
